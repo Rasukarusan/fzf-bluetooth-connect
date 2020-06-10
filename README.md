@@ -1,7 +1,7 @@
 fzf-bluetooth-connect
 ====
 
-![header]()
+<img src="https://user-images.githubusercontent.com/17779386/84265517-eaee1080-ab5d-11ea-80c8-da41554ccfbf.png" width="600">
 
 **Fuzzy search and connect to paired bluetooth device.**
 
@@ -11,7 +11,7 @@ You can connect to paired bluetooth device. This script use a apple script in sh
 
 ## Demo
 
-![demo.gif]()
+<img src="https://user-images.githubusercontent.com/17779386/84265271-8e8af100-ab5d-11ea-972b-0653090f6852.gif" width="600">
 
 ## Requirement
 
