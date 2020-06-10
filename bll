@@ -48,11 +48,11 @@ main() {
                     'system_profiler SPBluetoothDataType -json 2>/dev/null \
                         | jq -r ".SPBluetoothDataType[].device_title[]["\"{2}\""]
                         | select(type != \"null\")"' \
-                --preview-window right:70% 
+                "$@"
     )
     [ ${#selected[@]} -lt 2 ] && return 130
     echo ${selected[1]}
     connect ${selected[0]} >/dev/null
 }
 
-main
+main "$@"
