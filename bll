@@ -41,6 +41,7 @@ main() {
     local selected
     IFS=$'\t' read -r -a selected < <(
         pairedDevices \
+            | sed '/^$/d' \
             | fzf \
                 --delimiter $'\t' --with-nth 2 \
                 --preview \
