@@ -1,0 +1,57 @@
+#!/bin/bash
+
+pairedDevices() {
+osascript << EOF
+    use framework "IOBluetooth"
+    use scripting additions
+    set _results to {}
+
+    repeat with device in (current application's IOBluetoothDevice's pairedDevices() as list)
+        if device's isPaired()
+            set _address to device's addressString as string
+            set _name to device's nameOrAddress as string
+            set end of _results to {_address, "\t", _name, "\n"}
+        end if
+    end repeat
+
+    return _results as string
+EOF
+}
+
+connect() {
+local address=$1
+osascript << EOF
+    use framework "IOBluetooth"
+    use scripting additions
+
+    repeat with device in (current application's IOBluetoothDevice's pairedDevices() as list)
+        set _address to device's addressString() as string
+        if _address = "${address}"
+            if device's isConnected()
+                device's closeConnection()
+            else
+                device's openConnection()
+            end if
+        end if
+    end repeat
+EOF
+}
+
+main() {
+    local selected
+    IFS=$'\t' read -r -a selected < <(
+        pairedDevices \
+            | fzf \
+                --delimiter $'\t' --with-nth 2 \
+                --preview \
+                    'system_profiler SPBluetoothDataType -json 2>/dev/null \
+                        | jq -r ".SPBluetoothDataType[].device_title[]["\"{2}\""]
+                        | select(type != \"null\")"' \
+                --preview-window right:70% 
+    )
+    [ ${#selected[@]} -lt 2 ] && return 130
+    echo ${selected[1]}
+    connect ${selected[0]} >/dev/null
+}
+
+main
