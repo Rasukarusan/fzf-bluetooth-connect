@@ -38,21 +38,21 @@ EOF
 }
 
 main() {
-    local selected
-    IFS=$'\t' read -r -a selected < <(
-        pairedDevices \
-            | sed '/^$/d' \
-            | fzf \
-                --delimiter $'\t' --with-nth 2 \
-                --preview \
-                    'system_profiler SPBluetoothDataType -json 2>/dev/null \
-                        | jq -r ".SPBluetoothDataType[].device_title[]["\"{2}\""]
-                        | select(type != \"null\")"' \
-                "$@"
-    )
-    [ ${#selected[@]} -lt 2 ] && return 130
-    echo ${selected[1]}
-    connect ${selected[0]} >/dev/null
+    local selected=("$(pairedDevices \
+        | sed '/^$/d' \
+        | fzf \
+            --delimiter $'\t' --with-nth 2 \
+            --preview \
+                'system_profiler SPBluetoothDataType -json 2>/dev/null \
+                    | jq -r ".SPBluetoothDataType[].device_title[]["\"{2}\""]
+                    | select(type != \"null\")"' \
+    )")
+    echo "${selected[@]}" | while read line; do
+        local address name
+        read address name <<< $(echo "$line" | awk '{print $1, $2}')
+        echo "${name}"
+        connect ${address} >/dev/null
+    done
 }
 
 main "$@"
