@@ -60,6 +60,7 @@ $ bluetooth-fzf --no-preview
 
 ## Articles
 
+https://www.rasukarusan.com/entry/2020/06/10/214750
 
 ## License
 
