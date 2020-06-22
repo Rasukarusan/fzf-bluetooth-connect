@@ -10,7 +10,13 @@ osascript << EOF
         if device's isPaired()
             set _address to device's addressString as string
             set _name to device's nameOrAddress as string
-            set end of _results to {_address, "\t", _name, "\n"}
+            set _isConnected to device's isConnected as string
+            if _isConnected = "1"
+                set _isConnected to "✔"
+            else 
+                set _isConnected to "✗"
+            end if
+            set end of _results to {_address, "\t", _name, "\t", _isConnected, "\n"}
         end if
     end repeat
 
@@ -41,7 +47,7 @@ main() {
     local selected=("$(pairedDevices \
         | sed '/^$/d' \
         | fzf \
-            --delimiter $'\t' --with-nth 2 \
+            --delimiter $'\t' --with-nth 2,3 \
             --preview \
                 'system_profiler SPBluetoothDataType -json 2>/dev/null \
                     | jq -r ".SPBluetoothDataType[].device_title[]["\"{2}\""]
@@ -49,7 +55,7 @@ main() {
     )")
     echo "${selected[@]}" | while read line; do
         local address name
-        read address name <<< $(echo "$line" | awk '{print $1, $2}')
+        read address name <<< $(echo "$line" | cut -f1-)
         echo "${name}"
         connect ${address} >/dev/null
     done
