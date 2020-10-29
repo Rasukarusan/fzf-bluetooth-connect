@@ -11,7 +11,7 @@ You can connect to paired bluetooth device. This script use a apple script in sh
 
 ## Demo
 
-<img src="https://user-images.githubusercontent.com/17779386/84265271-8e8af100-ab5d-11ea-972b-0653090f6852.gif" width="600">
+<img src="https://user-images.githubusercontent.com/17779386/97555696-c1098d80-1a1b-11eb-8646-30e2999d5a94.gif" width="600">
 
 ## Requirement
 
