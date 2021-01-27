@@ -64,10 +64,4 @@ https://www.rasukarusan.com/entry/2020/06/10/214750
 
 ## License
 
-I'm lovin' fzf.
-
-> The MIT License (MIT)
->
-> Copyright (c) 2013-2020 Junegunn Choi
-
-https://github.com/junegunn/fzf
+MIT
